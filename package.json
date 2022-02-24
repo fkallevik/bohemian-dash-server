@@ -1,0 +1,9 @@
+{
+  "name": "bohemian-dash-server",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
