@@ -26,4 +26,26 @@ router.post("/sauna/data", (req, res) => {
   res.end();
 });
 
+router.get("/sauna/data", (req, res) => {
+  const db = new sqlite3.Database("database.sqlite3");
+
+  // Limit to entries for the last 4 hours
+  // Sensor pushes 1 entry per min
+  const limit = 60 * 4;
+
+  db.all(
+    `SELECT * FROM dht_data ORDER BY created_at DESC LIMIT ${limit}`,
+    function (error, rows) {
+      if (error !== null) {
+        console.log("Error: ", error);
+        return res.json({ error: true });
+      }
+
+      res.json({ error: false, data: rows });
+
+      db.close();
+    }
+  );
+});
+
 module.exports = router;
