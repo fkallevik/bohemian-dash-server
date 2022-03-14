@@ -12,6 +12,8 @@ router.post("/sauna/data", (req, res) => {
 
   const db = new sqlite3.Database("database.sqlite3");
 
+  // TODO FK: Add validation of data / error handling
+  // Important to sanitize data to prevent sql injection
   db.run(
     `INSERT INTO dht_data (temperature, humidity, created_at) VALUES (?, ?, ?)`,
     [temperature, humidity, createdAt],
