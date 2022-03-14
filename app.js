@@ -1,13 +1,25 @@
-const express = require('express');
-const path = require('path');
-const cookieParser = require('cookie-parser');
-const logger = require('morgan');
+const express = require("express");
+const logger = require("morgan");
+const saunaRouter = require("./saunaRouter");
+const cors = require("cors");
+const fs = require("fs");
 
 const app = express();
 
-app.use(logger('dev'));
+// Enable all CORS requests for now
+app.use(cors());
+
+// Mount common middleware
+app.use(logger("dev"));
+app.use(
+  logger("common", {
+    stream: fs.createWriteStream("./access.log", { flags: "a" }),
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+
+// Mount routers
+app.use(saunaRouter);
 
 module.exports = app;
