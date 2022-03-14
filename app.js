@@ -1,6 +1,7 @@
 const express = require("express");
 const logger = require("morgan");
 const saunaRouter = require("./saunaRouter");
+const authRouter = require("./authRouter");
 const cors = require("cors");
 const fs = require("fs");
 
@@ -21,5 +22,6 @@ app.use(express.urlencoded({ extended: false }));
 
 // Mount routers
 app.use(saunaRouter);
+app.use(authRouter);
 
 module.exports = app;
