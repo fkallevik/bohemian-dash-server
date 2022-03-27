@@ -28,12 +28,31 @@ router.post("/sauna/data", (req, res) => {
   res.end();
 });
 
+router.get("/sauna/highscore", (req, res) => {
+  const db = new sqlite3.Database("database.sqlite3");
+
+  // Get highest temp measurement
+  db.get(
+    `SELECT id, MAX(temperature) as temperature, humidity, created_at FROM dht_data`,
+    function (error, row) {
+      if (error !== null) {
+        console.log("Error: ", error);
+        return res.json({ error: true });
+      }
+
+      res.json({ error: false, data: row });
+
+      db.close();
+    }
+  );
+});
+
 router.get("/sauna/data", (req, res) => {
   const db = new sqlite3.Database("database.sqlite3");
 
-  // Limit to entries for the last 4 hours
+  // Limit to entries for the last week
   // Sensor pushes 1 entry per min
-  const limit = 60 * 4;
+  const limit = 60 * 24 * 7;
 
   db.all(
     `SELECT * FROM dht_data ORDER BY created_at DESC LIMIT ${limit}`,
